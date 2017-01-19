@@ -1,0 +1,129 @@
+resource "aws_iam_user" "myintegrator" {
+    name = "myintegrator"
+    path = "/integrator/myintegrator/"
+}
+
+resource "aws_iam_group_membership" "myintegrator" {
+    name = "myintegrator-group-membership"
+    users = [
+        "${aws_iam_user.myintegrator.name}"
+    ]
+    group = "${aws_iam_group.integrator.name}"
+}
+
+resource "aws_iam_group" "myintegrator-client" {
+    name = "myintegrator-client"
+    path = "/integrator-client/"
+}
+
+resource "aws_iam_policy" "myintegrator-client" {
+    name = "wtr_myintegrator_client_policy"
+    path = "/integrator-client/"
+    description = "Test policy for myintegrator's clients for WTR"
+    policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowGroupToSeeBucketListInTheConsole",
+            "Action": [
+                "s3:ListAllMyBuckets",
+                "s3:GetBucketLocation"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::*"
+            ]
+        },
+        {
+            "Sid": "AllowRootLevelListingOfTheBucket",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::myintegrator"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "s3:prefix": [
+                        ""
+                    ],
+                    "s3:delimiter": [
+                        "/"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "AllowListBucketOfASpecificUserPrefix",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::myintegrator"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "$${aws:username}"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "AllowListBucketContentsOfASpecificUserPrefix",
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::myintegrator"
+            ],
+            "Condition": {
+                "StringLike": {
+                    "s3:prefix": [
+                        "$${aws:username}/*"
+                    ]
+                }
+            }
+        },
+        {
+            "Sid": "AllowUserSpecificActionsOnlyInTheSpecificUserPrefix",
+            "Effect": "Allow",
+            "Action": [
+                "s3:*"
+            ],
+            "Resource": "arn:aws:s3:::myintegrator/$${aws:username}/*"
+        },
+        {
+            "Sid": "AllowManagementOfBucketNotifications",
+            "Action": [
+                "s3:GetBucketNotification",
+                "s3:PutBucketNotification"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:s3:::myintegrator"
+            ]
+        },
+        {
+            "Sid": "AllowGettingOwnUserDetails",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetUser"
+            ],
+            "Resource": [
+                "arn:aws:iam::*:user/integrator-client/$${aws:username}"
+            ]
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_group_policy_attachment" "myintegrator-client" {
+    group = "${aws_iam_group.myintegrator-client.name}"
+    policy_arn = "${aws_iam_policy.myintegrator-client.arn}"
+}
