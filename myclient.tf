@@ -1,6 +1,6 @@
 resource "aws_iam_user" "myclient" {
     name = "myclient"
-    path = "/integrator-client/myintegrator/"
+    path = "/myintegrator/"
 }
 
 resource "aws_iam_group_membership" "myintegrator-client" {
