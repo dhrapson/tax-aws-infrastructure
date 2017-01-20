@@ -255,3 +255,8 @@ resource "aws_iam_group_policy_attachment" "myintegrator-client" {
     group = "${aws_iam_group.myintegrator-client.name}"
     policy_arn = "${aws_iam_policy.myintegrator-client.arn}"
 }
+
+resource "aws_s3_bucket" "myintegrator" {
+    bucket = "myintegrator"
+    acl = "private"
+}
