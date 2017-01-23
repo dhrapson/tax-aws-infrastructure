@@ -114,7 +114,7 @@ resource "aws_iam_policy" "myintegrator" {
               "iam:RemoveUserFromGroup",
               "iam:GetGroup"
             ],
-            "Resource": "arn:aws:iam::*:group/myintegrator"
+            "Resource": "arn:aws:iam::*:group/integrator-client/myintegrator-client"
         }
     ]
 }
