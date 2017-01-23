@@ -5,14 +5,14 @@ provider "aws" {
 }
 
 resource "aws_iam_group" "myintegrator" {
-    name = "myintegrator"
+    name = "${var.integrator_name}"
     path = "/"
 }
 
 resource "aws_iam_policy" "myintegrator" {
-    name = "wtr_myintegrator_policy"
-    path = "/myintegrator/"
-    description = "Test policy for myintegrator group"
+    name = "wtr_${var.integrator_name}_policy"
+    path = "/${var.integrator_name}/"
+    description = "Test policy for ${var.integrator_name} group"
     policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -35,7 +35,7 @@ resource "aws_iam_policy" "myintegrator" {
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::myintegrator"
+                "arn:aws:s3:::${var.integrator_name}"
             ]
         },
         {
@@ -45,7 +45,7 @@ resource "aws_iam_policy" "myintegrator" {
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::myintegrator/*"
+                "arn:aws:s3:::${var.integrator_name}/*"
             ]
         },
         {
@@ -58,7 +58,7 @@ resource "aws_iam_policy" "myintegrator" {
                 "s3:DeleteObject",
                 "s3:DeleteObjectVersion"
             ],
-            "Resource": "arn:aws:s3:::myintegrator/*"
+            "Resource": "arn:aws:s3:::${var.integrator_name}/*"
         },
         {
             "Sid": "AllowManagementOfBucketNotifications",
@@ -68,7 +68,7 @@ resource "aws_iam_policy" "myintegrator" {
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::myintegrator"
+                "arn:aws:s3:::${var.integrator_name}"
             ]
         },
         {
@@ -114,7 +114,7 @@ resource "aws_iam_policy" "myintegrator" {
               "iam:RemoveUserFromGroup",
               "iam:GetGroup"
             ],
-            "Resource": "arn:aws:iam::*:group/integrator-client/myintegrator-client"
+            "Resource": "arn:aws:iam::*:group/integrator-client/${var.integrator_name}-client"
         }
     ]
 }
@@ -127,12 +127,12 @@ resource "aws_iam_group_policy_attachment" "myintegrator" {
 }
 
 resource "aws_iam_user" "myintegrator" {
-    name = "myintegrator"
+    name = "${var.integrator_name}"
     path = "/integrator/"
 }
 
 resource "aws_iam_group_membership" "myintegrator" {
-    name = "myintegrator-group-membership"
+    name = "${var.integrator_name}-group-membership"
     users = [
         "${aws_iam_user.myintegrator.name}"
     ]
@@ -140,14 +140,14 @@ resource "aws_iam_group_membership" "myintegrator" {
 }
 
 resource "aws_iam_group" "myintegrator-client" {
-    name = "myintegrator-client"
+    name = "${var.integrator_name}-client"
     path = "/integrator-client/"
 }
 
 resource "aws_iam_policy" "myintegrator-client" {
-    name = "wtr_myintegrator_client_policy"
+    name = "wtr_${var.integrator_name}_client_policy"
     path = "/integrator-client/"
-    description = "Test policy for myintegrator's clients for WTR"
+    description = "Test policy for ${var.integrator_name}'s clients for WTR"
     policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -170,7 +170,7 @@ resource "aws_iam_policy" "myintegrator-client" {
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::myintegrator"
+                "arn:aws:s3:::${var.integrator_name}"
             ],
             "Condition": {
                 "StringEquals": {
@@ -190,7 +190,7 @@ resource "aws_iam_policy" "myintegrator-client" {
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::myintegrator"
+                "arn:aws:s3:::${var.integrator_name}"
             ],
             "Condition": {
                 "StringLike": {
@@ -207,7 +207,7 @@ resource "aws_iam_policy" "myintegrator-client" {
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::myintegrator"
+                "arn:aws:s3:::${var.integrator_name}"
             ],
             "Condition": {
                 "StringLike": {
@@ -223,7 +223,7 @@ resource "aws_iam_policy" "myintegrator-client" {
             "Action": [
                 "s3:*"
             ],
-            "Resource": "arn:aws:s3:::myintegrator/$${aws:username}/*"
+            "Resource": "arn:aws:s3:::${var.integrator_name}/$${aws:username}/*"
         },
         {
             "Sid": "AllowManagementOfBucketNotifications",
@@ -233,7 +233,7 @@ resource "aws_iam_policy" "myintegrator-client" {
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::myintegrator"
+                "arn:aws:s3:::${var.integrator_name}"
             ]
         },
         {
@@ -243,7 +243,7 @@ resource "aws_iam_policy" "myintegrator-client" {
                 "iam:GetUser"
             ],
             "Resource": [
-                "arn:aws:iam::*:user/myintegrator/$${aws:username}"
+                "arn:aws:iam::*:user/${var.integrator_name}/$${aws:username}"
             ]
         }
     ]
@@ -257,6 +257,6 @@ resource "aws_iam_group_policy_attachment" "myintegrator-client" {
 }
 
 resource "aws_s3_bucket" "myintegrator" {
-    bucket = "myintegrator"
+    bucket = "${var.integrator_name}"
     acl = "private"
 }
