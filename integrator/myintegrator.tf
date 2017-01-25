@@ -25,7 +25,7 @@ resource "aws_iam_policy" "myintegrator" {
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::*"
+                "arn:aws:s3:::${var.integrator_name}"
             ]
         },
         {
@@ -146,14 +146,14 @@ resource "aws_iam_policy" "myintegrator-client" {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "AllowGroupToSeeBucketListInTheConsole",
+            "Sid": "AllowGroupToSeeMyBucket",
             "Action": [
                 "s3:ListAllMyBuckets",
                 "s3:GetBucketLocation"
             ],
             "Effect": "Allow",
             "Resource": [
-                "arn:aws:s3:::*"
+                "arn:aws:s3:::${var.integrator_name}"
             ]
         },
         {
