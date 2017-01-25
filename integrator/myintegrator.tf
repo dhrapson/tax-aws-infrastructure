@@ -214,7 +214,11 @@ resource "aws_iam_policy" "myintegrator-client" {
             "Sid": "AllowUserSpecificActionsOnlyInTheSpecificUserPrefix",
             "Effect": "Allow",
             "Action": [
-                "s3:*"
+              "s3:PutObject",
+              "s3:GetObject",
+              "s3:GetObjectVersion",
+              "s3:DeleteObject",
+              "s3:DeleteObjectVersion"
             ],
             "Resource": "arn:aws:s3:::${var.integrator_name}/$${aws:username}/*"
         },
