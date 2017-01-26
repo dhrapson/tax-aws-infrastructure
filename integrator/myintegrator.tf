@@ -256,4 +256,36 @@ resource "aws_iam_group_policy_attachment" "myintegrator-client" {
 resource "aws_s3_bucket" "myintegrator" {
     bucket = "${var.integrator_name}"
     acl = "private"
+    policy = <<EOF
+{
+	"Version": "2012-10-17",
+	"Id": "PutObjPolicy",
+	"Statement": [
+		{
+			"Sid": "DenyIncorrectEncryptionHeader",
+			"Effect": "Deny",
+			"Principal": "*",
+			"Action": "s3:PutObject",
+			"Resource": "arn:aws:s3:::${var.integrator_name}/*",
+			"Condition": {
+				"StringNotEquals": {
+					"s3:x-amz-server-side-encryption": "AES256"
+				}
+			}
+		},
+		{
+			"Sid": "DenyUnEncryptedObjectUploads",
+			"Effect": "Deny",
+			"Principal": "*",
+			"Action": "s3:PutObject",
+			"Resource": "arn:aws:s3:::${var.integrator_name}/*",
+			"Condition": {
+				"Null": {
+					"s3:x-amz-server-side-encryption": "true"
+				}
+			}
+		}
+	]
+}
+EOF
 }
