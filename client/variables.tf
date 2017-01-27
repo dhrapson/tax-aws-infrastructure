@@ -9,3 +9,7 @@ variable "client_names" {
   type = "list"
   default = ["myclient", "otherclient", "e2eclient"]
 }
+
+output "region" {
+  value = "${var.region}"
+}
