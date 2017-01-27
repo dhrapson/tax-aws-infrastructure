@@ -10,3 +10,7 @@ variable "deployers" {
   type = "list"
   default = ["ci"]
 }
+
+output "region" {
+  value = "${var.region}"
+}
