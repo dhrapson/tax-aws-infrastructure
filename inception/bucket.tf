@@ -14,3 +14,7 @@ variable "secret_key" {}
 variable "region" {
   default = "eu-west-1"
 }
+
+output "region" {
+  value = "${var.region}"
+}
