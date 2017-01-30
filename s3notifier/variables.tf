@@ -15,3 +15,7 @@ variable "email_from" {}
 variable "email_to" {}
 variable "dropbox_access_token" {}
 variable "dropbox_parent_folder" {}
+
+output "region" {
+  value = "${var.region}"
+}
