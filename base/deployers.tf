@@ -36,3 +36,11 @@ resource "aws_iam_group_policy_attachment" "deployers" {
     group = "${aws_iam_group.deployers.name}"
     policy_arn = "${aws_iam_policy.deployers.arn}"
 }
+
+resource "aws_iam_group_membership" "deployers" {
+    name = "deployers-group-membership"
+    users = [
+        "${var.deployers}"
+    ]
+    group = "${aws_iam_group.deployers.name}"
+}
