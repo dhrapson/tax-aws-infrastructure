@@ -7,7 +7,7 @@ provider "aws" {
 resource "aws_iam_user" "clients" {
     count = "${length(var.client_names)}"
     name = "${element(var.client_names, count.index)}"
-    path = "/${var.integrator_name}/"
+    path = "/${element(split(",", var.integrator_names_string), 0)}/"
 }
 
 resource "aws_iam_access_key" "clients" {
@@ -16,9 +16,9 @@ resource "aws_iam_access_key" "clients" {
 }
 
 resource "aws_iam_group_membership" "myintegrator-client" {
-    name = "${var.integrator_name}-${element(var.client_names, count.index)}-group-membership"
+    name = "${element(split(",", var.integrator_names_string), 0)}-${element(var.client_names, count.index)}-group-membership"
     users = [
         "${var.client_names}"
     ]
-    group = "${var.integrator_name}-client"
+    group = "${element(split(",", var.integrator_names_string), 0)}-client"
 }
