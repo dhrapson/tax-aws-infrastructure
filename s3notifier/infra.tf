@@ -160,8 +160,8 @@ resource "aws_lambda_function" "s3schedulechecker" {
             SMTP_PORT = "${var.smtp_port}"
             SMTP_USERNAME = "${var.smtp_username}"
             SMTP_PASSWORD = "${var.smtp_password}"
-            EMAIL_FROM = "${var.email_from}"
-            EMAIL_TO = "${var.email_to}"
+            EMAIL_FROM = "${var.s3notifier_email_from}"
+            EMAIL_TO = "${var.s3notifier_email_to}"
         }
     }
     timeout = 20
