@@ -85,12 +85,12 @@ EOF
 }
 
 resource "aws_lambda_function" "s3notifier" {
-    filename = "target/s3notifier-function.jar"
+    s3_bucket = "wtr-lambda-pipeline"
+    s3_key = "test/s3notifier-function.jar"
     function_name = "s3notifier"
     role = "${aws_iam_role.s3notifier_lambda_iam_role.arn}"
     runtime = "java8"
     handler = "com.wtr.s3notifier.SNSS3EventHandler"
-    source_code_hash = "${base64sha256(file("target/s3notifier-function.jar"))}"
     environment {
         variables = {
             SMTP_HOST = "${var.smtp_host}"
@@ -102,7 +102,7 @@ resource "aws_lambda_function" "s3notifier" {
             DROPBOX_ACCESS_TOKEN  ="${var.dropbox_access_token}"
             DROPBOX_PARENT_FOLDER ="${var.dropbox_parent_folder}"
         }
-    }	
+    }
     timeout = 20
     memory_size = 256
 }
@@ -114,12 +114,12 @@ resource "aws_sns_topic_subscription" "S3NotifierTopic-s3notifier" {
 }
 
 resource "aws_lambda_function" "s3reaper" {
-    filename = "target/s3notifier-function.jar"
+    s3_bucket = "wtr-lambda-pipeline"
+    s3_key = "test/s3notifier-function.jar"
     function_name = "s3reaper"
     role = "${aws_iam_role.s3notifier_lambda_iam_role.arn}"
     runtime = "java8"
     handler = "com.wtr.s3notifier.ReaperHandler"
-    source_code_hash = "${base64sha256(file("target/s3notifier-function.jar"))}"
     environment {
         variables = {
             SMTP_HOST = "${var.smtp_host}"
@@ -148,12 +148,12 @@ resource "aws_cloudwatch_event_rule" "s3reaper" {
 }
 
 resource "aws_lambda_function" "s3schedulechecker" {
-    filename = "target/s3notifier-function.jar"
+    s3_bucket = "wtr-lambda-pipeline"
+    s3_key = "test/s3notifier-function.jar"
     function_name = "s3schedulechecker"
     role = "${aws_iam_role.s3notifier_lambda_iam_role.arn}"
     runtime = "java8"
     handler = "com.wtr.s3notifier.ScheduleHandler"
-    source_code_hash = "${base64sha256(file("target/s3notifier-function.jar"))}"
     environment {
         variables = {
             SMTP_HOST = "${var.smtp_host}"
