@@ -97,8 +97,8 @@ resource "aws_lambda_function" "s3notifier" {
             SMTP_PORT = "${var.smtp_port}"
             SMTP_USERNAME = "${var.smtp_username}"
             SMTP_PASSWORD = "${var.smtp_password}"
-            EMAIL_FROM = "${var.email_from}"
-            EMAIL_TO = "${var.email_to}"
+            EMAIL_FROM = "${var.s3notifier_email_from}"
+            EMAIL_TO = "${var.s3notifier_email_to}"
             DROPBOX_ACCESS_TOKEN  ="${var.dropbox_access_token}"
             DROPBOX_PARENT_FOLDER ="${var.dropbox_parent_folder}"
         }
@@ -126,8 +126,8 @@ resource "aws_lambda_function" "s3reaper" {
             SMTP_PORT = "${var.smtp_port}"
             SMTP_USERNAME = "${var.smtp_username}"
             SMTP_PASSWORD = "${var.smtp_password}"
-            EMAIL_FROM = "${var.email_from}"
-            EMAIL_TO = "${var.email_to}"
+            EMAIL_FROM = "${var.s3notifier_email_from}"
+            EMAIL_TO = "${var.s3notifier_email_to}"
             DROPBOX_ACCESS_TOKEN  ="${var.dropbox_access_token}"
             DROPBOX_PARENT_FOLDER ="${var.dropbox_parent_folder}"
         }

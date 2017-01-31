@@ -11,8 +11,8 @@ variable "smtp_port" {
 }
 variable "smtp_username" {}
 variable "smtp_password" {}
-variable "email_from" {}
-variable "email_to" {}
+variable "s3notifier_email_from" {}
+variable "s3notifier_email_to" {}
 variable "dropbox_access_token" {}
 variable "dropbox_parent_folder" {}
 
